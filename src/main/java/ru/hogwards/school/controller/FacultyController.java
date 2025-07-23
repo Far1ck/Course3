@@ -3,6 +3,7 @@ package ru.hogwards.school.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwards.school.model.Faculty;
+import ru.hogwards.school.model.Student;
 import ru.hogwards.school.service.FacultyService;
 
 import java.util.List;
@@ -52,5 +53,26 @@ public class FacultyController {
     @GetMapping("/color")
     public List<Faculty> filterFacultiesByColor(@RequestParam String color) {
         return facultyService.filterByColor(color);
+    }
+
+    @GetMapping
+    public ResponseEntity<Faculty> findFacultyByNameOrColor(@RequestParam(required = false) String name,
+                                                            @RequestParam(required = false) String color) {
+        if (name != null && !name.isBlank()) {
+            return ResponseEntity.ok(facultyService.findFacultyByName(name));
+        }
+        if (color != null && !color.isBlank()) {
+            return ResponseEntity.ok(facultyService.findFacultyByColor(color));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity<List<Student>> getAllStudentsOfTheFacultyById(@PathVariable Long id) {
+        List<Student> result = facultyService.getAllStudentsOfTheFacultyById(id);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 }

@@ -2,6 +2,7 @@ package ru.hogwards.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwards.school.model.Faculty;
+import ru.hogwards.school.model.Student;
 import ru.hogwards.school.repository.FacultyRepository;
 
 import java.util.List;
@@ -32,5 +33,17 @@ public class FacultyService {
 
     public List<Faculty> filterByColor(String color) {
         return facultyRepository.findAllByColor(color);
+    }
+
+    public Faculty findFacultyByName(String name) {
+        return facultyRepository.findByNameIgnoreCase(name);
+    }
+
+    public Faculty findFacultyByColor(String color) {
+        return facultyRepository.findByColorIgnoreCase(color);
+    }
+
+    public List<Student> getAllStudentsOfTheFacultyById(Long id) {
+        return facultyRepository.findById(id).get().getStudents();
     }
 }
