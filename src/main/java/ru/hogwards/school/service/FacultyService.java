@@ -31,6 +31,6 @@ public class FacultyService {
     }
 
     public List<Faculty> filterByColor(String color) {
-        return facultyRepository.findByColor(color);
+        return facultyRepository.findAllByColor(color);
     }
 }
