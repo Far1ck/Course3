@@ -7,6 +7,7 @@ import ru.hogwards.school.model.Student;
 import ru.hogwards.school.service.StudentService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/student")
@@ -19,8 +20,10 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student result = studentService.getStudentById(id);
-        if (result == null) {
+        Student result;
+        try {
+            result = studentService.getStudentById(id);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
@@ -45,7 +48,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
@@ -61,10 +64,12 @@ public class StudentController {
         return studentService.filterByAgeBetween(minAge, maxAge);
     }
 
-    @GetMapping("/faculty/{id}")
+    @GetMapping("/{id}/faculty")
     public ResponseEntity<Faculty> getStudentFacultyById(@PathVariable Long id) {
-        Faculty result = studentService.getStudentFacultyById(id);
-        if (result == null) {
+        Faculty result;
+        try {
+            result = studentService.getStudentFacultyById(id);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
@@ -72,6 +77,9 @@ public class StudentController {
 
     @GetMapping("/faculty")
     public ResponseEntity<Faculty> getStudentFacultyByName(@RequestParam String name) {
+        if (name == null || name.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
         Faculty result = studentService.getStudentFacultyByName(name);
         if (result == null) {
             return ResponseEntity.notFound().build();

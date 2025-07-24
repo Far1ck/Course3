@@ -7,6 +7,7 @@ import ru.hogwards.school.model.Student;
 import ru.hogwards.school.service.FacultyService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/faculty")
@@ -19,8 +20,10 @@ public class FacultyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        Faculty result = facultyService.getFacultyById(id);
-        if (result == null) {
+        Faculty result;
+        try {
+            result = facultyService.getFacultyById(id);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
@@ -45,32 +48,33 @@ public class FacultyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFaculty(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/color")
-    public List<Faculty> filterFacultiesByColor(@RequestParam String color) {
-        return facultyService.filterByColor(color);
-    }
-
-    @GetMapping
-    public ResponseEntity<Faculty> findFacultyByNameOrColor(@RequestParam(required = false) String name,
-                                                            @RequestParam(required = false) String color) {
-        if (name != null && !name.isBlank()) {
-            return ResponseEntity.ok(facultyService.findFacultyByName(name));
-        }
+    public ResponseEntity<List<Faculty>> filterFacultiesByColor(@RequestParam String color) {
         if (color != null && !color.isBlank()) {
-            return ResponseEntity.ok(facultyService.findFacultyByColor(color));
+            return ResponseEntity.ok(facultyService.filterByColor(color));
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping
+    public ResponseEntity<Faculty> findFacultyByNameOrColor(@RequestParam String query) {
+        if (query != null && !query.isBlank()) {
+            return ResponseEntity.ok(facultyService.findFacultyByNameOrByColor(query, query));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/{id}/students")
     public ResponseEntity<List<Student>> getAllStudentsOfTheFacultyById(@PathVariable Long id) {
-        List<Student> result = facultyService.getAllStudentsOfTheFacultyById(id);
-        if (result == null) {
+        List<Student> result;
+        try {
+            result = facultyService.getAllStudentsOfTheFacultyById(id);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);

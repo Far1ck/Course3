@@ -20,7 +20,7 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-        return facultyRepository.findById(id).get();
+        return facultyRepository.findById(id).orElseThrow();
     }
 
     public Faculty updateFaculty(Faculty faculty) {
@@ -35,15 +35,11 @@ public class FacultyService {
         return facultyRepository.findAllByColor(color);
     }
 
-    public Faculty findFacultyByName(String name) {
-        return facultyRepository.findByNameIgnoreCase(name);
-    }
-
-    public Faculty findFacultyByColor(String color) {
-        return facultyRepository.findByColorIgnoreCase(color);
+    public Faculty findFacultyByNameOrByColor(String name, String color) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
 
     public List<Student> getAllStudentsOfTheFacultyById(Long id) {
-        return facultyRepository.findById(id).get().getStudents();
+        return facultyRepository.findById(id).orElseThrow().getStudents();
     }
 }

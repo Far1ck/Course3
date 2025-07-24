@@ -20,7 +20,7 @@ public class StudentService {
     }
 
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).get();
+        return studentRepository.findById(id).orElseThrow();
     }
 
     public Student updateStudent(Student student) {
@@ -40,10 +40,14 @@ public class StudentService {
     }
 
     public Faculty getStudentFacultyById(Long id) {
-        return studentRepository.findById(id).get().getFaculty();
+        return studentRepository.findById(id).orElseThrow().getFaculty();
     }
 
     public Faculty getStudentFacultyByName(String name) {
-        return studentRepository.findByNameContainsIgnoreCase(name).getFaculty();
+        Student result = studentRepository.findByNameContainsIgnoreCase(name);
+        if (result == null) {
+            return null;
+        }
+        return result.getFaculty();
     }
 }
