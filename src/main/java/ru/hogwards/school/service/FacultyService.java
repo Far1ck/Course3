@@ -6,6 +6,7 @@ import ru.hogwards.school.model.Student;
 import ru.hogwards.school.repository.FacultyRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class FacultyService {
@@ -35,11 +36,11 @@ public class FacultyService {
         return facultyRepository.findAllByColor(color);
     }
 
-    public Faculty findFacultyByNameOrByColor(String name, String color) {
-        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+    public Faculty findFacultyByNameOrByColor(String query) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(query, query);
     }
 
     public List<Student> getAllStudentsOfTheFacultyById(Long id) {
-        return facultyRepository.findById(id).orElseThrow().getStudents();
+        return facultyRepository.findById(id).orElseThrow(NoSuchElementException::new).getStudents();
     }
 }

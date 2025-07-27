@@ -55,28 +55,17 @@ public class FacultyController {
 
     @GetMapping("/color")
     public ResponseEntity<List<Faculty>> filterFacultiesByColor(@RequestParam String color) {
-        if (color != null && !color.isBlank()) {
-            return ResponseEntity.ok(facultyService.filterByColor(color));
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(facultyService.filterByColor(color));
     }
 
     @GetMapping
     public ResponseEntity<Faculty> findFacultyByNameOrColor(@RequestParam String query) {
-        if (query != null && !query.isBlank()) {
-            return ResponseEntity.ok(facultyService.findFacultyByNameOrByColor(query, query));
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(facultyService.findFacultyByNameOrByColor(query));
     }
 
     @GetMapping("/{id}/students")
     public ResponseEntity<List<Student>> getAllStudentsOfTheFacultyById(@PathVariable Long id) {
-        List<Student> result;
-        try {
-            result = facultyService.getAllStudentsOfTheFacultyById(id);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
-        }
+        List<Student> result = facultyService.getAllStudentsOfTheFacultyById(id);
         return ResponseEntity.ok(result);
     }
 }

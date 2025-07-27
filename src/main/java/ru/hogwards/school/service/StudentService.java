@@ -6,6 +6,7 @@ import ru.hogwards.school.model.Student;
 import ru.hogwards.school.repository.StudentRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class StudentService {
@@ -40,7 +41,7 @@ public class StudentService {
     }
 
     public Faculty getStudentFacultyById(Long id) {
-        return studentRepository.findById(id).orElseThrow().getFaculty();
+        return studentRepository.findById(id).orElseThrow(NoSuchElementException::new).getFaculty();
     }
 
     public Faculty getStudentFacultyByName(String name) {
