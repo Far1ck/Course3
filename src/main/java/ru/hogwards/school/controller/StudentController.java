@@ -2,10 +2,12 @@ package ru.hogwards.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwards.school.model.Faculty;
 import ru.hogwards.school.model.Student;
 import ru.hogwards.school.service.StudentService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/student")
@@ -18,8 +20,10 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student result = studentService.getStudentById(id);
-        if (result == null) {
+        Student result;
+        try {
+            result = studentService.getStudentById(id);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
@@ -44,7 +48,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
@@ -52,5 +56,26 @@ public class StudentController {
     @GetMapping("/age/{age}")
     public List<Student> filterStudentsByAge(@PathVariable int age) {
         return studentService.filterByAge(age);
+    }
+
+    @GetMapping("/age")
+    public List<Student> filterStudentsByAgeBetween(@RequestParam int minAge,
+                                                    @RequestParam int maxAge) {
+        return studentService.filterByAgeBetween(minAge, maxAge);
+    }
+
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<Faculty> getStudentFacultyById(@PathVariable Long id) {
+        Faculty result = studentService.getStudentFacultyById(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/faculty")
+    public ResponseEntity<Faculty> getStudentFacultyByName(@RequestParam String name) {
+        Faculty result = studentService.getStudentFacultyByName(name);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 }

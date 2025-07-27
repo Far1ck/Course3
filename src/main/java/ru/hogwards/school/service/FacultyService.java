@@ -2,9 +2,11 @@ package ru.hogwards.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwards.school.model.Faculty;
+import ru.hogwards.school.model.Student;
 import ru.hogwards.school.repository.FacultyRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class FacultyService {
@@ -19,7 +21,7 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-        return facultyRepository.findById(id).get();
+        return facultyRepository.findById(id).orElseThrow();
     }
 
     public Faculty updateFaculty(Faculty faculty) {
@@ -32,5 +34,13 @@ public class FacultyService {
 
     public List<Faculty> filterByColor(String color) {
         return facultyRepository.findAllByColor(color);
+    }
+
+    public Faculty findFacultyByNameOrByColor(String query) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(query, query);
+    }
+
+    public List<Student> getAllStudentsOfTheFacultyById(Long id) {
+        return facultyRepository.findById(id).orElseThrow(NoSuchElementException::new).getStudents();
     }
 }
