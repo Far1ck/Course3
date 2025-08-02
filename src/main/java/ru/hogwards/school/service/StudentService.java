@@ -21,7 +21,7 @@ public class StudentService {
     }
 
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).orElseThrow();
+        return studentRepository.findById(id).orElse(null);
     }
 
     public Student updateStudent(Student student) {
@@ -42,13 +42,5 @@ public class StudentService {
 
     public Faculty getStudentFacultyById(Long id) {
         return studentRepository.findById(id).orElseThrow(NoSuchElementException::new).getFaculty();
-    }
-
-    public Faculty getStudentFacultyByName(String name) {
-        Student result = studentRepository.findByNameContainsIgnoreCase(name);
-        if (result == null) {
-            return null;
-        }
-        return result.getFaculty();
     }
 }

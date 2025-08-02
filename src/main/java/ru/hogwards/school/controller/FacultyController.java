@@ -20,10 +20,8 @@ public class FacultyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        Faculty result;
-        try {
-            result = facultyService.getFacultyById(id);
-        } catch (NoSuchElementException e) {
+        Faculty result = facultyService.getFacultyById(id);
+        if (result == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
@@ -59,7 +57,7 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ResponseEntity<Faculty> findFacultyByNameOrColor(@RequestParam String query) {
+    public ResponseEntity<List<Faculty>> findFacultyByNameOrColor(@RequestParam String query) {
         return ResponseEntity.ok(facultyService.findFacultyByNameOrByColor(query));
     }
 
