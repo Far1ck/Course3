@@ -20,11 +20,9 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student result;
-        try {
-            result = studentService.getStudentById(id);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
+        Student result = studentService.getStudentById(id);
+        if (result == null) {
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(result);
     }
@@ -67,15 +65,6 @@ public class StudentController {
     @GetMapping("/{id}/faculty")
     public ResponseEntity<Faculty> getStudentFacultyById(@PathVariable Long id) {
         Faculty result = studentService.getStudentFacultyById(id);
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/faculty")
-    public ResponseEntity<Faculty> getStudentFacultyByName(@RequestParam String name) {
-        Faculty result = studentService.getStudentFacultyByName(name);
-        if (result == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(result);
     }
 }

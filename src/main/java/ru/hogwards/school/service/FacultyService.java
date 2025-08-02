@@ -21,7 +21,7 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-        return facultyRepository.findById(id).orElseThrow();
+        return facultyRepository.findById(id).orElse(null);
     }
 
     public Faculty updateFaculty(Faculty faculty) {
@@ -36,8 +36,8 @@ public class FacultyService {
         return facultyRepository.findAllByColor(color);
     }
 
-    public Faculty findFacultyByNameOrByColor(String query) {
-        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(query, query);
+    public List<Faculty> findFacultyByNameOrByColor(String query) {
+        return facultyRepository.findAllByNameIgnoreCaseOrColorIgnoreCase(query, query);
     }
 
     public List<Student> getAllStudentsOfTheFacultyById(Long id) {
