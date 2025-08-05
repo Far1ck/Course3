@@ -52,14 +52,14 @@ public class StudentController {
     }
 
     @GetMapping("/age/{age}")
-    public List<Student> filterStudentsByAge(@PathVariable int age) {
-        return studentService.filterByAge(age);
+    public ResponseEntity<List<Student>> filterStudentsByAge(@PathVariable int age) {
+        return ResponseEntity.ok(studentService.filterByAge(age));
     }
 
     @GetMapping("/age")
-    public List<Student> filterStudentsByAgeBetween(@RequestParam int minAge,
-                                                    @RequestParam int maxAge) {
-        return studentService.filterByAgeBetween(minAge, maxAge);
+    public ResponseEntity<List<Student>> filterStudentsByAgeBetween(@RequestParam int minAge,
+                                                                    @RequestParam int maxAge) {
+        return ResponseEntity.ok(studentService.filterByAgeBetween(minAge, maxAge));
     }
 
     @GetMapping("/{id}/faculty")
