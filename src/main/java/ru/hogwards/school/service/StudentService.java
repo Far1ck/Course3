@@ -43,4 +43,16 @@ public class StudentService {
     public Faculty getStudentFacultyById(Long id) {
         return studentRepository.findById(id).orElseThrow(NoSuchElementException::new).getFaculty();
     }
+
+    public int getNumberOfStudents() {
+        return studentRepository.getNumberOfStudents();
+    }
+
+    public double getAverageAgeOfStudents() {
+        return studentRepository.getAverageAgeOfStudents();
+    }
+
+    public List<Student> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents();
+    }
 }
