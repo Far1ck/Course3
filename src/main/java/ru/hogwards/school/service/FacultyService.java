@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @Service
 public class FacultyService {
 
-    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
