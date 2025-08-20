@@ -2,6 +2,7 @@ package ru.hogwards.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwards.school.model.Faculty;
 import ru.hogwards.school.model.Student;
@@ -9,6 +10,7 @@ import ru.hogwards.school.repository.StudentRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -70,5 +72,22 @@ public class StudentService {
     public List<Student> getLastFiveStudents() {
         logger.info("Was invoked method \"getLastFiveStudents\"");
         return studentRepository.getLastFiveStudents();
+    }
+
+    public List<String> getStudentsStartingWithA() {
+        return studentRepository.findAll().stream()
+                .parallel()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .toList();
+    }
+
+    public Double getAverageAgeOfStudents_Stream() {
+        return studentRepository.findAll().stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElse(0.0);
     }
 }

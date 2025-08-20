@@ -56,4 +56,11 @@ public class FacultyService {
         logger.warn("There may be no faculty with such ID");
         return facultyRepository.findById(id).orElseThrow(NoSuchElementException::new).getStudents();
     }
+
+    public String getTheLongestNameOfAFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max((a, b) -> a.length() - b.length())
+                .orElse(null);
+    }
 }
