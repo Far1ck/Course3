@@ -8,6 +8,7 @@ import ru.hogwards.school.service.StudentService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/student")
@@ -83,9 +84,12 @@ public class StudentController {
         return studentService.getLastFiveStudents();
     }
 
-    @GetMapping("/A")
-    public ResponseEntity<List<String>> getStudentsStartingWithA() {
-        return ResponseEntity.ok(studentService.getStudentsStartingWithA());
+    @GetMapping("/letter/{letter}")
+    public ResponseEntity<List<String>> getStudentsStartingWithLetter(@PathVariable String letter) {
+        if (letter.length() != 1) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(studentService.getStudentsStartingWithLetter(letter.toUpperCase()));
     }
 
     @GetMapping("/averageage")

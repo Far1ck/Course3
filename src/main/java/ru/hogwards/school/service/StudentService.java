@@ -74,12 +74,12 @@ public class StudentService {
         return studentRepository.getLastFiveStudents();
     }
 
-    public List<String> getStudentsStartingWithA() {
+    public List<String> getStudentsStartingWithLetter(String letter) {
         return studentRepository.findAll().stream()
                 .parallel()
                 .map(Student::getName)
                 .map(String::toUpperCase)
-                .filter(name -> name.startsWith("A"))
+                .filter(name -> name.startsWith(letter))
                 .sorted()
                 .toList();
     }
