@@ -90,4 +90,42 @@ public class StudentService {
                 .average()
                 .orElse(0.0);
     }
+
+    public void getStudentsNameParallel() {
+        List<Student> studentList = studentRepository.findAll();
+        System.out.println(studentList.get(0).getName());
+
+        new Thread(() -> {
+            System.out.println(studentList.get(2).getName());
+            System.out.println(studentList.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(studentList.get(4).getName());
+            System.out.println(studentList.get(5).getName());
+        }).start();
+
+        System.out.println(studentList.get(1).getName());
+    }
+
+    public void getStudentsNameSynchronized() {
+        List<Student> studentList = studentRepository.findAll();
+        printStudent(studentList.get(0).getName());
+
+        new Thread(() -> {
+            printStudent(studentList.get(2).getName());
+            printStudent(studentList.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            printStudent(studentList.get(4).getName());
+            printStudent(studentList.get(5).getName());
+        }).start();
+
+        printStudent(studentList.get(1).getName());
+    }
+
+    private synchronized static void printStudent(String name) {
+        System.out.println(name);
+    }
 }
