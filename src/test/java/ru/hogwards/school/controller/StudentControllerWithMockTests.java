@@ -168,4 +168,32 @@ public class StudentControllerWithMockTests {
                 .andExpect(jsonPath("$.name").value(faculty.getName()))
                 .andExpect(jsonPath("$.color").value(faculty.getColor()));
     }
+
+    @Test
+    public void getStudentsNameParallelTest() throws Exception {
+        Student student1 = new Student(1L, "1", 1);
+        Student student2 = new Student(2L, "2", 2);
+        Student student3 = new Student(3L, "3", 3);
+        Student student4 = new Student(4L, "4", 4);
+        List<Student> students = List.of(student1,student2, student3, student4);
+        doAnswer(inv -> students).when(studentRepository).findAll();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/print-parallel"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getStudentsNameSynchronizedTest() throws Exception {
+        Student student1 = new Student(1L, "1", 1);
+        Student student2 = new Student(2L, "2", 2);
+        Student student3 = new Student(3L, "3", 3);
+        Student student4 = new Student(4L, "4", 4);
+        List<Student> students = List.of(student1,student2, student3, student4);
+        doAnswer(inv -> students).when(studentRepository).findAll();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/print-synchronized"))
+                .andExpect(status().isOk());
+    }
 }
